@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.distributions import multivariate_normal
+from torch.distributions import normal
 from module import init_linear
 
 '''
@@ -63,9 +63,9 @@ class DEC(nn.Module):
             sigma : (B, in_dim)
         '''
 
-        M = multivariate_normal.MultivariateNormal(torch.zeros(mu.size()), torch.eye(mu.size(-1)))
+        M = normal.Normal(0, 1)
         if str(mu.device) != "cpu":
-            x = sigma + mu * M.sample().cuda()
+            x = mu + sigma * M.sample(mu.size()).cuda()
 
         for layer in self.module_dict:
             x = self.module_dict[layer](x)
