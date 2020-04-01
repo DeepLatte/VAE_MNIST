@@ -39,7 +39,7 @@ def test(data_loader, model_path):
         exit()
 
 def modelLoad(model_path):
-    graph_path = os.path.join(model_path, 'trained_val.pth')
+    graph_path = os.path.join(model_path, 'trained_val_126.pth')
     graph = VAE(in_dim=param.img_size ** 2, hidden_dim=500, out_dim=param.out_dim).to(DEVICE)
 
     graph_ckpt = torch.load(graph_path)

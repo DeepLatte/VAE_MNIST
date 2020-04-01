@@ -36,7 +36,7 @@ def train(data_loader, network_path, writer):
     vae_loss = VAELoss()
     epoch = 0
     global_step = 0
-    val_loss_min = 9999.
+    val_loss_min = 999999.
 
     for epoch in tqdm(range(param.stop_epoch)):
         temp_val_loss = 0
@@ -78,9 +78,10 @@ def train(data_loader, network_path, writer):
         temp_val_loss /= (len(data_loader) - (8 * len(data_loader)//10))
 
         if temp_val_loss < val_loss_min:
+            val_loss_min = temp_val_loss
             print("val_model_saved")
-            model_save(graph, epoch, optimizer, temp_val_loss, network_path, "val_{}".format(epoch))
-            plot_reproduce(val_input_img[:100], val_output[:100], 10, "val_{}".format(epoch))
+            model_save(graph, epoch, optimizer, temp_val_loss, network_path, "val")
+            plot_reproduce(val_input_img[:100], val_output[:100], 10, "{}".format(epoch))
         epoch += 1
 
         

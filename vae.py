@@ -63,11 +63,11 @@ class DEC(nn.Module):
             sigma : (B, in_dim)
         '''
 
-        # M = normal.Normal(0, 1)
-        # if str(mu.device) != "cpu":
-        #     x = mu + sigma * M.sample(mu.size()).cuda()
+        M = normal.Normal(0, 1)
+        if str(mu.device) != "cpu":
+            x = mu + sigma * M.sample(mu.size()).cuda()
 
-        x = mu + sigma * torch.rand_like(mu)
+        # x = mu + sigma * torch.rand_like(mu)
         for layer in self.module_dict:
             x = self.module_dict[layer](x)
         output = torch.clamp(x, 1e-6, 1 - 1e-6)
