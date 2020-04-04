@@ -75,4 +75,25 @@ def plot_reproduce(input, output, numb_in_row, i):
     bx.imshow(paper_output)
     plt.savefig(os.path.abspath('../saved/res_{}.png'.format(i)))
     plt.close()
-            
+
+def latent_plot(output, numb_in_row, i):
+    width = numb_in_row * param.img_size
+    height = width
+    paper_output = np.zeros((height, width))
+    start_h = 0
+    pivot_h = start_h
+    pivot_w = 0
+    output = output.view(-1, param.img_size, param.img_size)
+    for out_img in output:
+        paper_output[pivot_h:pivot_h + param.img_size, pivot_w : pivot_w + param.img_size] = np.array(out_img.data.cpu())
+        pivot_w += param.img_size
+        if pivot_w >= width:
+            pivot_w = 0
+            pivot_h += param.img_size
+
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+
+    ax.imshow(paper_output)
+    plt.savefig(os.path.abspath('../saved/res_latent_{}.png'.format(i)))
+    plt.close()

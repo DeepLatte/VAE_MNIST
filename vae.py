@@ -24,6 +24,10 @@ class VAE(nn.Module):
 
         return output, mu, sigma
 
+    def infer_z(self, z):
+        output = self.vae_dec.infer_z(z)
+        return output
+
 class ENC(nn.Module):
     # return mu and sigma together
     def __init__(self, in_dim, hidden_dim, out_dim):
@@ -72,7 +76,14 @@ class DEC(nn.Module):
             x = self.module_dict[layer](x)
         output = torch.clamp(x, 1e-6, 1 - 1e-6)
         return output
-        
+
+    def infer_z(self, z):
+        for layer in self.module_dict:
+            z = self.module_dict[layer](z)
+            
+        output = torch.clamp(z, 1e-6, 1 - 1e-6)
+        return output
+
 class VAELoss:
     def __init__(self):
         try :
